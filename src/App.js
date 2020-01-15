@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-
-function wait(ms) {
-  return new Promise((resolve, reject) => {
-    setTimeout(resolve, ms);
-  });
-}
+import { login } from "./api";
 
 function useField(initial) {
   const [value, setValue] = useState(initial);
@@ -94,15 +89,16 @@ function LoggedIn({ onLogOut }) {
   );
 }
 
-function App() {
+function App({ onLoggedIn = () => {} }) {
   const [loading, setLoading] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
 
-  function handleSubmit() {
+  function handleSubmit(email, password) {
     setLoading(true);
-    wait(2000).then(() => {
+    login(email, password).then(() => {
       setLoading(false);
       setLoggedIn(true);
+      onLoggedIn();
     });
   }
 
